@@ -1,0 +1,726 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KMFlow - 项目计划</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-light: #dbeafe;
+      --success: #16a34a;
+      --success-light: #dcfce7;
+      --warning: #d97706;
+      --warning-light: #fef3c7;
+      --danger: #dc2626;
+      --danger-light: #fee2e2;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --gray-900: #111827;
+      --radius: 12px;
+    }
+
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Noto Sans SC", sans-serif;
+      line-height: 1.7;
+      color: var(--gray-800);
+      background: var(--gray-50);
+      padding: 2rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    /* Header */
+    .hero {
+      text-align: center;
+      padding: 3rem 2rem;
+      background: linear-gradient(135deg, #1e3a5f 0%, #2563eb 100%);
+      border-radius: var(--radius);
+      color: white;
+      margin-bottom: 2rem;
+    }
+    .hero h1 { font-size: 2.5rem; margin-bottom: 0.5rem; letter-spacing: -0.02em; }
+    .hero .tagline { font-size: 1.2rem; opacity: 0.9; }
+    .hero .badges { margin-top: 1.2rem; display: flex; gap: 0.5rem; justify-content: center; flex-wrap: wrap; }
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      background: rgba(255,255,255,0.2);
+      backdrop-filter: blur(4px);
+    }
+
+    /* Sections */
+    section { margin-bottom: 2rem; }
+    h2 {
+      font-size: 1.5rem;
+      color: var(--gray-900);
+      margin-bottom: 1rem;
+      padding-bottom: 0.5rem;
+      border-bottom: 2px solid var(--primary-light);
+    }
+    h3 { font-size: 1.15rem; color: var(--gray-800); margin: 1.2rem 0 0.6rem; }
+
+    /* Cards */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 1rem;
+    }
+    .card {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1.2rem;
+      transition: box-shadow 0.2s;
+    }
+    .card:hover { box-shadow: 0 4px 12px rgba(0,0,0,0.08); }
+    .card-title { font-weight: 700; margin-bottom: 0.4rem; color: var(--gray-900); }
+    .card-desc { font-size: 0.9rem; color: var(--gray-600); }
+
+    /* Tables */
+    table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.9rem; }
+    th, td { padding: 0.6rem 0.8rem; text-align: left; border-bottom: 1px solid var(--gray-200); }
+    th { background: var(--gray-100); font-weight: 600; color: var(--gray-900); }
+    tr:hover td { background: var(--gray-50); }
+
+    /* Architecture diagram */
+    .arch-box {
+      background: var(--gray-900);
+      color: #e2e8f0;
+      padding: 1.5rem;
+      border-radius: var(--radius);
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      font-size: 0.82rem;
+      line-height: 1.5;
+      overflow-x: auto;
+      white-space: pre;
+    }
+
+    /* Roadmap */
+    .phase {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1rem;
+      border-left: 4px solid var(--primary);
+    }
+    .phase.phase-2 { border-left-color: #7c3aed; }
+    .phase.phase-3 { border-left-color: #0891b2; }
+    .phase.phase-4 { border-left-color: var(--success); }
+    .phase.phase-5 { border-left-color: var(--warning); }
+    .phase-header { font-weight: 700; font-size: 1.05rem; margin-bottom: 0.6rem; }
+    .phase ul { padding-left: 1.2rem; }
+    .phase li { margin-bottom: 0.3rem; font-size: 0.9rem; color: var(--gray-600); }
+
+    /* Decision blocks */
+    .decision {
+      background: white;
+      border: 1px solid var(--gray-200);
+      border-radius: var(--radius);
+      padding: 1.2rem 1.5rem;
+      margin-bottom: 1rem;
+    }
+    .vs-table { margin: 0.8rem 0; }
+    .vs-table th:first-child { width: 30%; }
+    .check { color: var(--success); }
+    .cross { color: var(--danger); }
+
+    /* Code block */
+    .code-block {
+      background: var(--gray-900);
+      color: #a5f3fc;
+      padding: 1.2rem;
+      border-radius: var(--radius);
+      font-family: "JetBrains Mono", "Fira Code", monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+    .code-block .keyword { color: #c084fc; }
+    .code-block .type { color: #fbbf24; }
+    .code-block .field { color: #86efac; }
+    .code-block .comment { color: #6b7280; }
+
+    /* Tags */
+    .tag {
+      display: inline-block;
+      padding: 0.15rem 0.5rem;
+      border-radius: 4px;
+      font-size: 0.78rem;
+      font-weight: 600;
+      margin-right: 0.3rem;
+    }
+    .tag-rust { background: #fde68a; color: #92400e; }
+    .tag-quic { background: #dbeafe; color: #1e40af; }
+    .tag-wayland { background: #d1fae5; color: #065f46; }
+    .tag-iced { background: #ede9fe; color: #5b21b6; }
+
+    /* Non-goals */
+    .non-goals {
+      background: var(--danger-light);
+      border: 1px solid #fca5a5;
+      border-radius: var(--radius);
+      padding: 1rem 1.5rem;
+    }
+    .non-goals li { margin-bottom: 0.3rem; font-size: 0.9rem; }
+
+    /* References */
+    .ref-list { list-style: none; padding: 0; }
+    .ref-list li {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--gray-200);
+      font-size: 0.9rem;
+    }
+    .ref-list a { color: var(--primary); text-decoration: none; font-weight: 600; }
+    .ref-list a:hover { text-decoration: underline; }
+    .ref-list .ref-desc { color: var(--gray-600); margin-left: 0.5rem; }
+
+    /* Footer */
+    footer {
+      text-align: center;
+      padding: 1.5rem;
+      color: var(--gray-600);
+      font-size: 0.85rem;
+      border-top: 1px solid var(--gray-200);
+      margin-top: 2rem;
+    }
+  </style>
+</head>
+<body>
+
+<!-- Hero -->
+<header class="hero">
+  <h1>KMFlow</h1>
+  <p class="tagline">Keyboard &amp; Mouse Flow — 一套键鼠，多台电脑，无缝切换</p>
+  <div class="badges">
+    <span class="badge">Rust</span>
+    <span class="badge">QUIC</span>
+    <span class="badge">Wayland-first</span>
+    <span class="badge">跨平台</span>
+    <span class="badge">MIT</span>
+  </div>
+</header>
+
+<!-- 项目定位 -->
+<section>
+  <h2>项目定位</h2>
+  <p>用 Rust 构建的跨平台局域网键鼠共享工具（Software KVM），目标是成为 Deskflow/Synergy 的现代替代品。</p>
+  <div class="card-grid" style="margin-top: 1rem;">
+    <div class="card">
+      <div class="card-title">内存安全 + 高性能</div>
+      <div class="card-desc">Rust 零开销抽象，无 GC 停顿，无 C/C++ 内存漏洞</div>
+    </div>
+    <div class="card">
+      <div class="card-title">QUIC 一体化网络</div>
+      <div class="card-desc">加密 + 不可靠 datagram（键鼠）+ 可靠 stream（剪贴板）统一在一个协议栈</div>
+    </div>
+    <div class="card">
+      <div class="card-title">Wayland-first</div>
+      <div class="card-desc">原生支持 libei / Input Capture Portal，同时兼容 X11、Windows、macOS</div>
+    </div>
+    <div class="card">
+      <div class="card-title">剪贴板内建</div>
+      <div class="card-desc">文本/图片/文件 URI 剪贴板同步，不需要外部工具拼凑</div>
+    </div>
+    <div class="card">
+      <div class="card-title">纯 Rust GUI (iced)</div>
+      <div class="card-desc">Elm 架构，跨平台一致外观，无 GTK/Qt 依赖</div>
+    </div>
+    <div class="card">
+      <div class="card-title">零配置发现</div>
+      <div class="card-desc">mDNS 自动发现局域网设备，开箱即用</div>
+    </div>
+  </div>
+</section>
+
+<!-- 技术栈 -->
+<section>
+  <h2>技术栈</h2>
+  <table>
+    <thead>
+      <tr><th>层</th><th>选择</th><th>理由</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>语言</td>
+        <td><span class="tag tag-rust">Rust</span></td>
+        <td>安全、性能、跨平台编译</td>
+      </tr>
+      <tr>
+        <td>网络协议</td>
+        <td><span class="tag tag-quic">quinn (QUIC)</span></td>
+        <td>内建 TLS 1.3 加密；unreliable datagram 传键鼠事件（低延迟）；reliable stream 传剪贴板/文件</td>
+      </tr>
+      <tr>
+        <td>序列化</td>
+        <td><code>serde + bincode</code></td>
+        <td>零拷贝，极低开销</td>
+      </tr>
+      <tr>
+        <td>输入捕获 (Linux Wayland)</td>
+        <td><span class="tag tag-wayland">libei</span> + layer-shell</td>
+        <td>freedesktop 标准 + wlroots fallback</td>
+      </tr>
+      <tr>
+        <td>输入注入 (Linux Wayland)</td>
+        <td>libei (eis) / wlroots protocols</td>
+        <td>标准方案</td>
+      </tr>
+      <tr>
+        <td>输入 (Linux X11)</td>
+        <td>XInput2 + XTest</td>
+        <td>成熟稳定</td>
+      </tr>
+      <tr>
+        <td>输入 (Windows)</td>
+        <td>Raw Input + SendInput</td>
+        <td>Win32 标准</td>
+      </tr>
+      <tr>
+        <td>输入 (macOS)</td>
+        <td>CGEvent tap + post</td>
+        <td>Core Graphics 标准</td>
+      </tr>
+      <tr>
+        <td>GUI</td>
+        <td><span class="tag tag-iced">iced</span></td>
+        <td>Elm 架构适配 daemon IPC；COSMIC 桌面验证；wgpu 跨平台一致</td>
+      </tr>
+      <tr>
+        <td>服务发现</td>
+        <td><code>mdns-sd</code></td>
+        <td>零配置，自动发现局域网设备</td>
+      </tr>
+      <tr>
+        <td>配置</td>
+        <td>TOML</td>
+        <td>Rust 生态标准</td>
+      </tr>
+    </tbody>
+  </table>
+</section>
+
+<!-- 架构 -->
+<section>
+  <h2>架构设计</h2>
+  <svg viewBox="0 0 800 520" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:800px;display:block;margin:0 auto;">
+    <defs>
+      <filter id="shadow" x="-2%" y="-2%" width="104%" height="104%">
+        <feDropShadow dx="0" dy="2" stdDeviation="3" flood-opacity="0.1"/>
+      </filter>
+      <marker id="arrow" markerWidth="8" markerHeight="8" refX="8" refY="4" orient="auto">
+        <path d="M0,0 L8,4 L0,8 Z" fill="#6b7280"/>
+      </marker>
+    </defs>
+
+    <!-- GUI Layer -->
+    <rect x="200" y="20" width="400" height="80" rx="12" fill="#ede9fe" stroke="#8b5cf6" stroke-width="2" filter="url(#shadow)"/>
+    <text x="400" y="52" text-anchor="middle" font-size="16" font-weight="700" fill="#5b21b6">kmflow-gui</text>
+    <text x="400" y="76" text-anchor="middle" font-size="12" fill="#6b7280">iced | 配置界面 | 系统托盘</text>
+
+    <!-- IPC Arrow -->
+    <line x1="400" y1="100" x2="400" y2="150" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+    <text x="415" y="130" font-size="11" fill="#6b7280">IPC</text>
+
+    <!-- Daemon Layer -->
+    <rect x="100" y="155" width="600" height="90" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2" filter="url(#shadow)"/>
+    <text x="400" y="185" text-anchor="middle" font-size="16" font-weight="700" fill="#1e40af">kmflow-daemon</text>
+    <text x="400" y="210" text-anchor="middle" font-size="12" fill="#6b7280">核心调度: 连接管理 | 屏幕拓扑 | 事件路由</text>
+    <text x="400" y="230" text-anchor="middle" font-size="11" fill="#6b7280">Cargo workspace 入口，协调各子模块</text>
+
+    <!-- Arrows to sub-modules -->
+    <line x1="190" y1="245" x2="190" y2="290" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="400" y1="245" x2="400" y2="290" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+    <line x1="610" y1="245" x2="610" y2="290" stroke="#6b7280" stroke-width="2" marker-end="url(#arrow)"/>
+
+    <!-- kmflow-net -->
+    <rect x="100" y="295" width="180" height="100" rx="12" fill="#dcfce7" stroke="#16a34a" stroke-width="2" filter="url(#shadow)"/>
+    <text x="190" y="325" text-anchor="middle" font-size="14" font-weight="700" fill="#065f46">kmflow-net</text>
+    <text x="190" y="348" text-anchor="middle" font-size="10" fill="#4b5563">QUIC datagram (键鼠)</text>
+    <text x="190" y="365" text-anchor="middle" font-size="10" fill="#4b5563">QUIC stream (剪贴板)</text>
+    <text x="190" y="382" text-anchor="middle" font-size="10" fill="#4b5563">mDNS 自动发现</text>
+
+    <!-- kmflow-input -->
+    <rect x="310" y="295" width="180" height="100" rx="12" fill="#fef3c7" stroke="#d97706" stroke-width="2" filter="url(#shadow)"/>
+    <text x="400" y="325" text-anchor="middle" font-size="14" font-weight="700" fill="#92400e">kmflow-input</text>
+    <text x="400" y="348" text-anchor="middle" font-size="10" fill="#4b5563">capture: libei | xinput2</text>
+    <text x="400" y="365" text-anchor="middle" font-size="10" fill="#4b5563">emulate: xtest | sendinput</text>
+    <text x="400" y="382" text-anchor="middle" font-size="10" fill="#4b5563">统一 InputEvent 抽象</text>
+
+    <!-- kmflow-clipboard -->
+    <rect x="520" y="295" width="180" height="100" rx="12" fill="#fce7f3" stroke="#db2777" stroke-width="2" filter="url(#shadow)"/>
+    <text x="610" y="325" text-anchor="middle" font-size="14" font-weight="700" fill="#9d174d">kmflow-clipboard</text>
+    <text x="610" y="348" text-anchor="middle" font-size="10" fill="#4b5563">监听剪贴板变化</text>
+    <text x="610" y="365" text-anchor="middle" font-size="10" fill="#4b5563">QUIC stream 同步</text>
+    <text x="610" y="382" text-anchor="middle" font-size="10" fill="#4b5563">文本 / 图片 / 文件</text>
+
+    <!-- Proto layer -->
+    <rect x="100" y="430" width="600" height="60" rx="12" fill="#f3f4f6" stroke="#9ca3af" stroke-width="1.5" filter="url(#shadow)"/>
+    <text x="400" y="458" text-anchor="middle" font-size="14" font-weight="700" fill="#374151">kmflow-proto</text>
+    <text x="400" y="478" text-anchor="middle" font-size="11" fill="#6b7280">serde + bincode | InputEvent | ControlCommand | ClipboardPayload</text>
+
+    <!-- Arrows to proto -->
+    <line x1="190" y1="395" x2="190" y2="428" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <line x1="400" y1="395" x2="400" y2="428" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4,3"/>
+    <line x1="610" y1="395" x2="610" y2="428" stroke="#9ca3af" stroke-width="1.5" stroke-dasharray="4,3"/>
+  </svg>
+
+  <div class="card-grid" style="margin-top: 1.2rem;">
+    <div class="card">
+      <div class="card-title">kmflow-net</div>
+      <div class="card-desc">
+        QUIC datagram → 键鼠事件 (不可靠, 低延迟)<br>
+        QUIC stream → 剪贴板/文件/控制命令 (可靠)<br>
+        mDNS 自动发现 + 手动 IP<br>
+        断连检测 (500ms 超时) + 0-RTT 自动重连<br>
+        休眠/唤醒感知 (监听 logind/IOKit 事件)<br>
+        <code>kmflow setup-firewall</code> 自动生成 UDP 放行规则
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">kmflow-input</div>
+      <div class="card-desc">
+        capture: libei, layer-shell, xinput2, rawinput, cgevent<br>
+        emulation: libei, wlroots, xtest, sendinput, cgevent<br>
+        统一 InputEvent enum 抽象<br>
+        屏幕边缘检测 + 四角死区 (50px, 可配置) 防误触<br>
+        <strong>按键粘滞防护</strong>: 焦点切换瞬间，扫描 pressed_keys 集合，向源端发送所有 pending key 的 release 事件<br>
+        <strong>多显示器拓扑</strong>: 每条边缘绑定到具体 monitor_id + edge，支持"A 的右屏右边缘 → B"<br>
+        紧急释放热键 (Ctrl+Alt+Esc) 强制回本机<br>
+        Wayland 权限: 提供 polkit rule 模板 + systemd 持久授权
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">kmflow-clipboard</div>
+      <div class="card-desc">
+        监听本地剪贴板变化<br>
+        QUIC reliable stream 同步到对端<br>
+        支持文本 / 图片 / 文件 URI<br>
+        <strong>环路抑制</strong>: 每次写入剪贴板附带 origin_peer_id 标记，监听到变化时比对来源，来自远端的写入不回传
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">kmflow-proto</div>
+      <div class="card-desc">
+        EventFrame: 序列号 + 时间戳 + 批量事件 (&lt;1200B MTU)<br>
+        接收端 3-5 帧重排窗口，超时直接投递不等待<br>
+        ScreenInfo: 分辨率 + scale_factor, DPI 自动缩放 dx/dy<br>
+        <strong>按键传输标准</strong>: 传输层统一使用 USB HID scancode，接收端负责映射为本地 keycode（Linux evdev / Win VK / macOS kVK）<br>
+        <strong>默认端口</strong>: 4242/udp (QUIC)，可通过 <code>--port</code> 或 TOML <code>port = N</code> 覆盖<br>
+        握手协议版本协商，不兼容时明确报错提示升级
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">安全模型</div>
+      <div class="card-desc">
+        QUIC 内建 TLS 1.3 加密全部流量<br>
+        TOFU 配对: 首次连接显示公钥指纹，用户确认后存入 known_peers<br>
+        后续连接自动验证证书，指纹不匹配则拒绝 + 告警<br>
+        mDNS 仅广播存在，不接受未配对设备的数据连接<br>
+        <strong>延迟预算</strong>: 端到端目标 &lt;5ms，拆分为 capture ≤1ms → serialize ≤0.2ms → network ≤2ms (LAN) → deserialize ≤0.2ms → emulate ≤1ms
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">连接状态机</div>
+      <div class="card-desc">
+        Disconnected → Discovering → Pairing → Connected → Active<br>
+        Active → Suspended (休眠) → Reconnecting → Active<br>
+        Active → Disconnected (超时500ms未恢复 → 释放焦点回本机)
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 使用流程 -->
+<section>
+  <h2>使用流程</h2>
+  <p>P2P 对等模式 — 两台电脑角色对称，不区分 server/client。谁有焦点谁发送，鼠标移回来就自动切换。</p>
+
+  <svg viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg" style="width:100%;max-width:750px;display:block;margin:1.5rem auto;">
+    <!-- PC A -->
+    <rect x="40" y="40" width="250" height="120" rx="12" fill="#dbeafe" stroke="#2563eb" stroke-width="2"/>
+    <text x="165" y="72" text-anchor="middle" font-size="15" font-weight="700" fill="#1e40af">电脑 A</text>
+    <text x="165" y="96" text-anchor="middle" font-size="11" fill="#4b5563">键鼠物理连接</text>
+    <text x="165" y="116" text-anchor="middle" font-size="11" fill="#4b5563">kmflow daemon (capture)</text>
+    <text x="165" y="145" text-anchor="middle" font-size="20">🖱️ ⌨️</text>
+
+    <!-- Arrow -->
+    <line x1="295" y1="100" x2="465" y2="100" stroke="#2563eb" stroke-width="2.5" marker-end="url(#arrow)"/>
+    <line x1="465" y1="100" x2="295" y2="100" stroke="#2563eb" stroke-width="2.5" marker-start="url(#arrow)"/>
+    <text x="380" y="85" text-anchor="middle" font-size="11" font-weight="600" fill="#2563eb">QUIC (双向)</text>
+    <text x="380" y="120" text-anchor="middle" font-size="10" fill="#6b7280">局域网</text>
+
+    <!-- PC B -->
+    <rect x="470" y="40" width="250" height="120" rx="12" fill="#dcfce7" stroke="#16a34a" stroke-width="2"/>
+    <text x="595" y="72" text-anchor="middle" font-size="15" font-weight="700" fill="#065f46">电脑 B</text>
+    <text x="595" y="96" text-anchor="middle" font-size="11" fill="#4b5563">无键鼠 / 有键鼠均可</text>
+    <text x="595" y="116" text-anchor="middle" font-size="11" fill="#4b5563">kmflow daemon (emulate)</text>
+    <text x="595" y="145" text-anchor="middle" font-size="20">🖥️</text>
+  </svg>
+
+  <div class="decision" style="margin-top:1rem;">
+    <h3>典型操作步骤</h3>
+    <div class="code-block">
+<span class="comment"># 1. 首次安装后，开放防火墙端口</span>
+<span class="keyword">$</span> kmflow setup-firewall
+<span class="field">✓</span> ufw: allow 4242/udp (QUIC)
+
+<span class="comment"># 2. 两台电脑都启动 daemon</span>
+<span class="keyword">$</span> kmflow start
+
+<span class="comment"># 3. 配对（mDNS 自动发现，或手动 IP）</span>
+<span class="keyword">$</span> kmflow pair 192.168.1.42
+<span class="field">?</span> 对方指纹: <span class="type">a3:f2:9c:...</span> 是否信任? [y/N] y
+<span class="field">✓</span> 已保存到 known_peers
+
+<span class="comment"># 4. 设定屏幕位置关系</span>
+<span class="keyword">$</span> kmflow layout --right=office-pc
+
+<span class="comment"># 5. 查看状态</span>
+<span class="keyword">$</span> kmflow status
+<span class="field">office-pc</span>  192.168.1.42  <span class="type">connected</span>  2ms  1920x1080@1x
+
+<span class="comment"># GUI 模式（可选，拖拽配置拓扑）</span>
+<span class="keyword">$</span> kmflow gui
+
+<span class="comment"># 紧急释放：Ctrl+Alt+Esc 强制焦点回本机</span></div>
+  </div>
+
+  <div class="card-grid" style="margin-top: 1rem;">
+    <div class="card">
+      <div class="card-title">P2P 对等</div>
+      <div class="card-desc">两边 daemon 角色对称，不需理解 server/client 概念。三台以上也能任意切换。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">CLI + GUI 双模式</div>
+      <div class="card-desc">日常通过 CLI 或 TOML 配置；可选 GUI 拖拽设定拓扑。一个二进制全包含。</div>
+    </div>
+    <div class="card">
+      <div class="card-title">鼠标边缘触发</div>
+      <div class="card-desc">鼠标移到屏幕边缘自动切换到对方电脑，键盘输入跟随焦点，移回来就切回。</div>
+    </div>
+  </div>
+</section>
+
+<!-- 部署方式 -->
+<section>
+  <h2>部署方式</h2>
+  <table>
+    <thead>
+      <tr><th>平台</th><th>安装方式</th><th>说明</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>Linux</td>
+        <td><code>cargo install kmflow</code></td>
+        <td>Rust 用户直接编译</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>Flatpak / AppImage</td>
+        <td>通用分发，解决依赖</td>
+      </tr>
+      <tr>
+        <td></td>
+        <td>AUR / deb / rpm</td>
+        <td>各发行版原生包</td>
+      </tr>
+      <tr>
+        <td>Windows</td>
+        <td>MSI 安装包 / winget</td>
+        <td>标准安装，注册开机自启</td>
+      </tr>
+      <tr>
+        <td>macOS</td>
+        <td><code>brew install kmflow</code></td>
+        <td>Homebrew 分发</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="card-grid" style="margin-top: 1rem;">
+    <div class="card">
+      <div class="card-title">单一二进制</div>
+      <div class="card-desc">
+        <code>kmflow</code> 包含 daemon + CLI + GUI，子命令切换模式。<br>
+        Cargo feature: <code>default = ["gui"]</code>；headless 服务器可 <code>--no-default-features</code> 编译，体积减半。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">后台常驻</div>
+      <div class="card-desc">
+        systemd user service / launchd / Windows Service，开机自启。<br>
+        休眠/唤醒自动重连；systemd 方式启动可持久化 Wayland portal 授权。
+      </div>
+    </div>
+    <div class="card">
+      <div class="card-title">权限管理</div>
+      <div class="card-desc">
+        Linux: input 组 + polkit rule 模板 (自动安装)<br>
+        macOS: 首次引导辅助功能权限授予<br>
+        Windows: UAC 提权 + 防火墙规则自动注册
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 路线图 -->
+<section>
+  <h2>开发路线图</h2>
+
+  <div class="phase">
+    <div class="phase-header">Phase 1: 核心 MVP (Linux Wayland ↔ Linux Wayland)</div>
+    <ul>
+      <li>项目脚手架：Cargo workspace, CI (GitHub Actions), tracing 日志框架</li>
+      <li><code>kmflow-proto</code>: 消息格式 (bincode)，含序列号 + 时间戳 + 版本协商</li>
+      <li><code>kmflow-net</code>: QUIC 连接建立，datagram 收发，断连检测 + 自动重连</li>
+      <li><code>kmflow-input</code> Linux Wayland 后端: libei capture + emulation</li>
+      <li><code>kmflow-daemon</code>: 双机连接，屏幕边缘检测 + 切换（含死区防误触）</li>
+      <li>焦点切换时 flush 所有 pressed_keys 的 release 事件（防按键粘滞）</li>
+      <li>紧急释放机制: 组合键强制回到本机（如 Ctrl+Alt+Escape）</li>
+      <li>DPI / 分辨率协商: 连接建立时交换屏幕信息，自动缩放 dx/dy</li>
+      <li>配对信任: TOFU 模式 + 首次连接指纹确认</li>
+      <li>基础 CLI 配置 (TOML)</li>
+      <li>端到端测试: 两台 Linux Wayland 机器间鼠标+键盘共享</li>
+      <li>CI 测试策略: 单元测试 mock libei trait；集成测试用 Linux network namespace 模拟双机 QUIC 通信；真机 Wayland 测试在 self-hosted runner 上跑</li>
+    </ul>
+  </div>
+
+  <div class="phase phase-2">
+    <div class="phase-header">Phase 2: 多平台输入后端</div>
+    <ul>
+      <li>X11 后端 (capture + emulation)</li>
+      <li>Windows 后端 (capture + emulation)</li>
+      <li>macOS 后端 (capture + emulation)</li>
+      <li>跨平台按键映射: 传输层统一 USB HID scancode，各平台接收端维护 HID → 本地码映射表 (evdev/VK/kVK)，特别处理 IME/Fn/media 键</li>
+    </ul>
+  </div>
+
+  <div class="phase phase-3">
+    <div class="phase-header">Phase 3: 剪贴板 &amp; 服务发现</div>
+    <ul>
+      <li><code>kmflow-clipboard</code>: 剪贴板监听与同步 (文本)，含 origin_peer_id 环路抑制</li>
+      <li>图片/文件 URI 剪贴板支持</li>
+      <li>mDNS 自动发现局域网设备</li>
+      <li>防火墙自动配置提示 (ufw/firewalld 规则生成)</li>
+    </ul>
+  </div>
+
+  <div class="phase phase-4">
+    <div class="phase-header">Phase 4: GUI &amp; 用户体验</div>
+    <ul>
+      <li><code>kmflow-gui</code>: iced GUI (设备拓扑拖拽配置)</li>
+      <li>系统托盘 / 状态指示</li>
+      <li>屏幕拓扑可视化配置（哪台在左哪台在右）</li>
+      <li>热键切换支持</li>
+      <li>多显示器支持: ScreenInfo 扩展为 Vec&lt;Monitor&gt;，每条边缘绑定 (monitor_id, edge)，GUI 中可视化配置</li>
+    </ul>
+  </div>
+
+  <div class="phase phase-5">
+    <div class="phase-header">Phase 5: 进阶功能</div>
+    <ul>
+      <li>文件拖拽传输</li>
+      <li>多设备 (&gt;2) 支持</li>
+      <li>Android / iOS 作为被控端</li>
+      <li>Wayland layer-shell fallback 完善</li>
+      <li>性能基准测试 &amp; 优化（延迟 &lt; 5ms 目标）</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 设计决策 -->
+<section>
+  <h2>关键设计决策</h2>
+
+  <div class="decision">
+    <h3>为什么选 QUIC 而不是纯 UDP + DTLS？</h3>
+    <table class="vs-table">
+      <thead>
+        <tr><th></th><th>纯 UDP + DTLS</th><th>QUIC (quinn)</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>加密</td><td>需要单独实现握手</td><td>内建 TLS 1.3, 0-RTT</td></tr>
+        <tr><td>键鼠事件</td><td><span class="check">&#10003;</span> UDP 直发</td><td><span class="check">&#10003;</span> QUIC Datagram (同样不可靠低延迟)</td></tr>
+        <tr><td>剪贴板/文件</td><td><span class="cross">&#10007;</span> 需要自己实现可靠传输</td><td><span class="check">&#10003;</span> QUIC Stream (内建可靠传输)</td></tr>
+        <tr><td>连接恢复</td><td>需要自己实现</td><td><span class="check">&#10003;</span> 0-RTT 快速重连</td></tr>
+        <tr><td>实现复杂度</td><td>高</td><td>低 (quinn 封装好)</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="decision">
+    <h3>为什么选 iced？</h3>
+    <table class="vs-table">
+      <thead>
+        <tr><th>方案</th><th>评价</th></tr>
+      </thead>
+      <tbody>
+        <tr><td>GTK4</td><td>Linux 好但 macOS/Windows 依赖重、观感差</td></tr>
+        <tr><td>Qt</td><td>需要 C++ binding，编译复杂</td></tr>
+        <tr><td>egui</td><td>即时模式适合开发工具，外观偏"程序员风"，状态管理自由度过高</td></tr>
+        <tr><td><strong>iced</strong></td><td>Elm 架构天然适配 daemon IPC；COSMIC 桌面验证；wgpu 跨平台一致；强制状态分离</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="decision">
+    <h3>协议设计</h3>
+    <div class="code-block">
+<span class="comment">// 每个 datagram 包含的帧头</span>
+<span class="keyword">pub struct</span> <span class="type">EventFrame</span> {
+    <span class="field">seq</span>: <span class="type">u32</span>,          <span class="comment">// 序列号，用于乱序检测</span>
+    <span class="field">timestamp</span>: <span class="type">u64</span>,    <span class="comment">// 微秒时间戳</span>
+    <span class="field">events</span>: Vec&lt;<span class="type">InputEvent</span>&gt;, <span class="comment">// 可批量，单帧 &lt; 1200B (MTU)</span>
+}
+
+<span class="keyword">pub enum</span> <span class="type">InputEvent</span> {
+    <span class="field">MouseMove</span> { dx: <span class="type">f64</span>, dy: <span class="type">f64</span> },
+    <span class="field">MouseButton</span> { button: <span class="type">Button</span>, state: <span class="type">ButtonState</span> },
+    <span class="field">Scroll</span> { dx: <span class="type">f64</span>, dy: <span class="type">f64</span> },
+    <span class="field">Key</span> { scancode: <span class="type">u32</span>, state: <span class="type">KeyState</span> },
+}
+
+<span class="comment">// 连接建立时交换的屏幕信息</span>
+<span class="keyword">pub struct</span> <span class="type">ScreenInfo</span> {
+    <span class="field">width</span>: <span class="type">u32</span>,
+    <span class="field">height</span>: <span class="type">u32</span>,
+    <span class="field">scale_factor</span>: <span class="type">f64</span>,  <span class="comment">// HiDPI 缩放</span>
+    <span class="field">position</span>: <span class="type">Edge</span>,     <span class="comment">// 在拓扑中的相对位置</span>
+}
+<span class="comment">// scancode 使用 USB HID Usage ID (跨平台统一)，接收端映射为本地 keycode</span></div>
+  </div>
+</section>
+
+<!-- 非目标 -->
+<section>
+  <h2>非目标 (不做)</h2>
+  <div class="non-goals">
+    <ul>
+      <li>视频流/远程桌面（不是 VNC/RDP）</li>
+      <li>游戏手柄共享</li>
+      <li>公网穿透（只做局域网，公网用户自己套 WireGuard/Tailscale）</li>
+    </ul>
+  </div>
+</section>
+
+<!-- 许可证 -->
+<section>
+  <h2>许可证</h2>
+  <p><strong>MIT</strong> — 最宽松的开源协议，商用、修改、分发无限制。</p>
+</section>
+
+<footer>
+  KMFlow &copy; 2026 | 计划制定于 2026-05-19
+</footer>
+
+</body>
+</html>

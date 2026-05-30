@@ -1,0 +1,25 @@
+[package]
+name = "kmflow-input"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "KMFlow input capture and emulation backends"
+
+[features]
+default = ["x11", "evdev"]
+x11 = ["x11rb"]
+evdev = ["libc"]
+
+[dependencies]
+kmflow-proto.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+
+# X11 backend (capture + emulate)
+x11rb = { workspace = true, optional = true }
+
+# evdev/uinput backend (capture + emulate, works on any compositor)
+libc = { version = "0.2", optional = true }

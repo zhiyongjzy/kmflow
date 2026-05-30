@@ -1,0 +1,27 @@
+[package]
+name = "kmflow-daemon"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "KMFlow daemon - core orchestration"
+
+[features]
+default = ["x11", "evdev"]
+x11 = ["kmflow-input/x11", "dep:x11rb"]
+evdev = ["kmflow-input/evdev"]
+
+[dependencies]
+kmflow-proto.workspace = true
+kmflow-net.workspace = true
+kmflow-input.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+anyhow.workspace = true
+thiserror.workspace = true
+serde.workspace = true
+serde_json.workspace = true
+toml.workspace = true
+directories.workspace = true
+x11rb = { workspace = true, optional = true }
+libc = "0.2"

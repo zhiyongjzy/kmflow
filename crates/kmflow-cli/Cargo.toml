@@ -1,0 +1,29 @@
+[package]
+name = "kmflow"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+rust-version.workspace = true
+description = "KMFlow - LAN keyboard & mouse sharing"
+
+[[bin]]
+name = "kmflow"
+path = "src/main.rs"
+
+[features]
+default = ["x11", "evdev"]
+x11 = ["kmflow-daemon/x11"]
+evdev = ["kmflow-daemon/evdev"]
+
+[dependencies]
+kmflow-proto.workspace = true
+kmflow-daemon.workspace = true
+kmflow-net.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+clap.workspace = true
+anyhow.workspace = true
+toml.workspace = true
+directories.workspace = true
+serde_json.workspace = true
