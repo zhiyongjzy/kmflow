@@ -17,7 +17,7 @@ use state::ConnectionState;
 use std::collections::{HashMap, HashSet};
 use std::net::SocketAddr;
 use std::sync::Arc;
-use std::time::{Duration, SystemTime, UNIX_EPOCH};
+use std::time::{Duration, Instant, SystemTime, UNIX_EPOCH};
 use tokio::sync::{Mutex, mpsc, watch};
 use tracing::{debug, error, info, warn};
 
@@ -29,6 +29,7 @@ const RECONNECT_BASE_DELAY: Duration = Duration::from_secs(1);
 const RECONNECT_MAX_DELAY: Duration = Duration::from_secs(30);
 const RECONNECT_MAX_ATTEMPTS: u32 = 10;
 const EVENT_BATCH_LIMIT: usize = 64;
+const EDGE_COOLDOWN: Duration = Duration::from_millis(500);
 
 pub struct Daemon {
     config: KmflowConfig,
@@ -54,6 +55,7 @@ struct DaemonState {
     focus_is_remote: bool,
     cursor_x: i32,
     cursor_y: i32,
+    last_focus_switch: Instant,
 }
 
 impl Daemon {
@@ -104,6 +106,7 @@ impl Daemon {
             focus_is_remote: false,
             cursor_x: screen.width as i32 / 2,
             cursor_y: screen.height as i32 / 2,
+            last_focus_switch: Instant::now(),
         }));
 
         Ok(Self {
@@ -537,7 +540,7 @@ impl Daemon {
                                         Ok(frame) => {
                                             let mut s = state.lock().await;
                                             if !s.focus_is_remote {
-                                                // Track cursor for edge detection
+                                                let in_cooldown = s.last_focus_switch.elapsed() < EDGE_COOLDOWN;
                                                 let mut hit_edge = false;
                                                 for event in &frame.events {
                                                     if let InputEvent::MouseMove { dx, dy } = event {
@@ -545,7 +548,7 @@ impl Daemon {
                                                             .clamp(0, local_screen.width as i32 - 1);
                                                         s.cursor_y = (s.cursor_y + *dy as i32)
                                                             .clamp(0, local_screen.height as i32 - 1);
-                                                        if edge_detector.check(s.cursor_x, s.cursor_y) != EdgeHit::None {
+                                                        if !in_cooldown && edge_detector.check(s.cursor_x, s.cursor_y) != EdgeHit::None {
                                                             hit_edge = true;
                                                             break;
                                                         }
@@ -579,11 +582,15 @@ impl Daemon {
                                         Ok(ControlCommand::SwitchFocus { .. }) => {
                                             let mut s = state.lock().await;
                                             s.focus_is_remote = false;
+                                            s.cursor_x = local_screen.width as i32 / 2;
+                                            s.cursor_y = local_screen.height as i32 / 2;
                                             info!("peer switched focus to us (receive-only)");
                                         }
                                         Ok(ControlCommand::ReleaseFocus) => {
                                             let mut s = state.lock().await;
                                             s.focus_is_remote = false;
+                                            s.cursor_x = local_screen.width as i32 / 2;
+                                            s.cursor_y = local_screen.height as i32 / 2;
                                             info!("peer released focus (receive-only)");
                                         }
                                         Ok(ControlCommand::PeerDisconnecting) => break,
@@ -680,8 +687,10 @@ impl Daemon {
                         Ok(frame) => {
                             let mut s = state.lock().await;
                             if !s.focus_is_remote {
-                                // Track cursor and check edge hit for focus return
+                                // Track cursor for edge detection (return focus to peer)
+                                let in_cooldown = s.last_focus_switch.elapsed() < EDGE_COOLDOWN;
                                 let mut hit_edge = false;
+
                                 for event in &frame.events {
                                     if let InputEvent::MouseMove { dx, dy } = event {
                                         s.cursor_x = (s.cursor_x + *dx as i32)
@@ -689,7 +698,7 @@ impl Daemon {
                                         s.cursor_y = (s.cursor_y + *dy as i32)
                                             .clamp(0, local_screen.height as i32 - 1);
 
-                                        if edge_detector.check(s.cursor_x, s.cursor_y) != EdgeHit::None {
+                                        if !in_cooldown && edge_detector.check(s.cursor_x, s.cursor_y) != EdgeHit::None {
                                             hit_edge = true;
                                             break;
                                         }
@@ -732,6 +741,9 @@ impl Daemon {
                             // Peer is sending focus to us — we become the receiver
                             let mut s = state.lock().await;
                             s.focus_is_remote = false;
+                            s.cursor_x = local_screen.width as i32 / 2;
+                            s.cursor_y = local_screen.height as i32 / 2;
+                            s.last_focus_switch = Instant::now();
                             let _ = grab_tx.send(false);
                             info!("peer switched focus to us");
                         }
@@ -739,6 +751,9 @@ impl Daemon {
                             // Peer released focus back
                             let mut s = state.lock().await;
                             s.focus_is_remote = false;
+                            s.cursor_x = local_screen.width as i32 / 2;
+                            s.cursor_y = local_screen.height as i32 / 2;
+                            s.last_focus_switch = Instant::now();
                             let _ = grab_tx.send(false);
                             info!("peer released focus");
                         }
